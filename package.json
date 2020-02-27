@@ -1,0 +1,16 @@
+{
+  "name": "parking-application-worker-prototype",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "moment": "^2.24.0",
+    "mysql": "^2.18.1",
+    "request": "^2.88.2"
+  }
+}
