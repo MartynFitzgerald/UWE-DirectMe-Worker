@@ -113,8 +113,9 @@ function carparksInsert(lat, lng, radius, scrapingLocationId) {
                 }
               });
             }
-        }
-        
+          }
+        });
+
         var sql = `SELECT * FROM car_park WHERE external_provider_id = '${externalId}';`;
 
         dbController.connection.query(sql, function(error, result, fields) {
