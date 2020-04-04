@@ -92,7 +92,30 @@ function carparksInsert(lat, lng, radius, scrapingLocationId) {
         // Using moment libary to allow be able to add this into MySQL timestamp format 
         var lastUpdatedAt = moment(Date.now()).format('YYYY-MM-DD HH:mm:ss');
 
-        var sql = `SELECT * FROM car_park WHERE external_id = '${externalId}';`;
+
+
+        var sql = `SELECT * FROM external_provider WHERE external_provider_id = '${externalId}';`;
+
+        dbController.connection.query(sql, function(error, result, fields) {
+          if (error) {
+            return callback(error);
+          }
+
+          if (result.length <= 0) {
+            {
+             //Insert new external provder id
+             var sql = `INSERT IGNORE INTO external_provider (external_provider, name) VALUES ('${externalId}','${externalProvider}');`;
+          
+              dbController.connection.query(sql, function(error, result, fields) {
+                if (error) {
+                  console.error(`Failed to update - '${externalId}'`, error);
+                  process.exit();
+                }
+              });
+            }
+        }
+        
+        var sql = `SELECT * FROM car_park WHERE external_provider_id = '${externalId}';`;
 
         dbController.connection.query(sql, function(error, result, fields) {
           if (error) {
@@ -116,7 +139,7 @@ function carparksInsert(lat, lng, radius, scrapingLocationId) {
           else
           {
             //Insert new car park
-            var sql = `INSERT IGNORE INTO car_park (scraping_location_id, external_id, external_provider, name, latitude, longitude, last_updated_at) VALUES ('${scrapingLocationId}', '${externalId}','${externalProvider}','${name}','${latitude}', '${longitude}', '${lastUpdatedAt}');`;
+            var sql = `INSERT IGNORE INTO car_park (scraping_location_id, external_provider_id, name, latitude, longitude, last_updated_at) VALUES ('${scrapingLocationId}', '${externalId}','${name}','${latitude}', '${longitude}', '${lastUpdatedAt}');`;
           
             dbController.connection.query(sql, function(error, result, fields) {
               if (error) {
@@ -133,22 +156,24 @@ function carparksInsert(lat, lng, radius, scrapingLocationId) {
   });
 }
 
-/* 
-  The initializer of getting scraping locations.
-*/
-getScrapingLocations(function(error, result) {
-  if (error) {
-    console.error('Failed to get scraping locations', error);
-    process.exit();
-  }
+exports.handler = async (event) => {
+  /* 
+    The initializer of getting scraping locations.
+  */
+  getScrapingLocations(function(error, result) {
+    if (error) {
+      console.error('Failed to get scraping locations', error);
+      process.exit();
+    }
 
-  for (var i = 0; i < result.length; i++)
-  {
-    scrapingLocations.push(result[i]);
-  }
-  
-  for (var i = 0; i < scrapingLocations.length; i++)
-  {
-    carparksInsert(scrapingLocations[i].latitude, scrapingLocations[i].longitude, scrapingLocations[i].radius, scrapingLocations[i].id);
-  }
-});
+    for (var i = 0; i < result.length; i++)
+    {
+      scrapingLocations.push(result[i]);
+    }
+    
+    for (var i = 0; i < scrapingLocations.length; i++)
+    {
+      carparksInsert(scrapingLocations[i].latitude, scrapingLocations[i].longitude, scrapingLocations[i].radius, scrapingLocations[i].id);
+    }
+  });
+};
