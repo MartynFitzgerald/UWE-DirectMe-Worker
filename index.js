@@ -72,56 +72,65 @@ function requestDataFromGoogleApi(url, nextPageToken = null, callback) {
 */
 function carparksInsert(lat, lng, radius, scrapingLocationId) {
   // Create The URL to the API 
-  var url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?type=parking&radius=${radius}&location=${lat},${lng}&key=AIzaSyBeMKzk8ZpyU2Hk_lrVmlO-Ggq1tQqtYsM`
-  
+  var url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?type=parking&radius=${radius}&location=${lat},${lng}&key=AIzaSyBeMKzk8ZpyU2Hk_lrVmlO-Ggq1tQqtYsM`;
+
   requestDataFromGoogleApi(url, null, function(error, result) {
     if (error) {
-      console.error('Failed to get request data from google api', error);
+      console.error('DirectMe - Failed to get request data from google api', error);
       process.exit();
     }
     
     async.each(result, function (row, callback) {
-      console.log(row);
-      //Assigning key values to be inputted into the sql statement
+      //Assigning key values to be inserted into the exernal provider table
       var externalId = row.id;
-      var externalProvider = "Google"
+      var externalProvider = "Google";
+      var placeId = row.place_id;
+      var reference = row.reference;
+      var rating = row.rating;
+      var amountUserRatings = row.user_ratings_total;
+      //Assigning key values to be inserted into the car park table
       var name = row.name;
       var latitude = row.geometry.location.lat;
       var longitude = row.geometry.location.lng;
+      var address = row.vicinity;
       // Using moment libary to allow be able to add this into MySQL timestamp format 
       var lastUpdatedAt = moment(Date.now()).format('YYYY-MM-DD HH:mm:ss');
 
       //Insert new external provder id
-      dbController.connection.query(`INSERT IGNORE INTO external_provider (external_provider_id, name) VALUES ('${externalId}', '${externalProvider}');`, function(error, result, fields) {
+      dbController.connection.query(`INSERT IGNORE INTO external_provider (external_provider_id, name, place_id, reference, rating, user_ratings_total) VALUES ('${externalId}', '${externalProvider}', '${placeId}', '${reference}', '${rating}', '${amountUserRatings}');`, function(error, result, fields) {
         if (error) {
-          console.error(`Failed to update - '${externalId}'`, error);
+          console.error(`DirectMe - Failed to Insert - '${externalId}'`, error);
           process.exit();
         }
+        
+        console.log(`DirectMe - Inserted ID - '${externalId}'`);
       });
       
       dbController.connection.query(`SELECT * FROM car_park WHERE external_provider_id = '${externalId}';`, function(error, result, fields) {
         if (error) {
-          console.error(`Failed to update - '${externalId}'`, error);
+          console.error(`DirectMe - Failed to update - '${externalId}'`, error);
           process.exit();
         }
 
         if (result.length > 0) {
-          if ((result[0].name != name) || (result[0].latitude != latitude) || (result[0].longitude != longitude)) {
+          if ((result[0].name != name) || (result[0].latitude != latitude) || (result[0].longitude != longitude) || (result[0].address != address)) {
             //Update car park with the new values
-            dbController.connection.query(`UPDATE car_park SET name = '${name}', latitude = '${latitude}', longitude = '${longitude}', last_updated_at = '${lastUpdatedAt}' WHERE external_provider_id = '${externalId}';`, function(error, result, fields) {
+            dbController.connection.query(`UPDATE car_park SET name = '${name}', latitude = '${latitude}', longitude = '${longitude}', address = "${address}", last_updated_at = '${lastUpdatedAt}' WHERE external_provider_id = '${externalId}';`, function(error, result, fields) {
               if (error) {
-              console.error(`Failed to update - '${externalId}'`, error);
+              console.error(`DirectMe - Failed to update - '${externalId}'`, error);
               process.exit();
               }
+              console.log(`DirectMe - Updated CP - '${externalId}'`);
             });
            }
         } else {
           //Update car park with the new values
-          dbController.connection.query(`INSERT IGNORE INTO car_park (scraping_location_id, external_provider_id, name, latitude, longitude, last_updated_at) VALUES ('${scrapingLocationId}', '${externalId}','${name}','${latitude}', '${longitude}', '${lastUpdatedAt}');`, function(error, result, fields) {
+          dbController.connection.query(`INSERT IGNORE INTO car_park (scraping_location_id, external_provider_id, name, address, latitude, longitude, last_updated_at) VALUES ('${scrapingLocationId}','${externalId}','${name}',"${address}",'${latitude}','${longitude}','${lastUpdatedAt}');`, function(error, result, fields) {
             if (error) {
-            console.error(`Failed to insert - '${externalId}'`, error);
+            console.error(`DirectMe - Failed to insert - '${externalId}'`, error);
             process.exit();
             }
+            console.log(`DirectMe - Inserted CP - '${externalId}'`);
           });
         }
       });
@@ -129,17 +138,19 @@ function carparksInsert(lat, lng, radius, scrapingLocationId) {
   });
 }
 
+//Log the Initialization of the worker.
+console.log(`DirectMe - Worker Initializing.`);
+
 /* 
   The initializer of getting scraping locations.
 */
 getScrapingLocations(function(error, result) {
   if (error) {
-    console.error('Failed to get scraping locations', error);
+    console.error('DirectMe - Failed to get scraping locations', error);
     process.exit();
   }
 
-  for (var i = 0; i < result.length; i++)
-  {
-    carparksInsert(result[i].latitude, result[i].longitude, result[i].radius, result[i].scraping_location_id);
-  }
+  async.each(result, function (row, callback) {
+    carparksInsert(row.latitude, row.longitude, row.radius, row.scraping_location_id);
+  });
 });
