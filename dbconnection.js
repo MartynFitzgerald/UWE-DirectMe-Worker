@@ -13,9 +13,9 @@
 *===========================================================================*/
 const mysql = require('mysql');
 const con = mysql.createConnection({
-  host     : 'localhost',
+  host     : 'aag6xgkxz6hbhx.cmpsexi9hgwn.us-east-1.rds.amazonaws.com',
   user     : 'root',
-  password : '',
+  password : 'gZLn[7{9f]p+6=B8',
   port     : '3306',
   database : 'directme'
 });
