@@ -17,7 +17,7 @@ const con = mysql.createConnection({
   user     : 'root',
   password : 'gZLn[7{9f]p+6=B8',
   port     : '3306',
-  database : 'directme'
+  database : 'DirectMe'
 });
   
 exports.connection = con;
