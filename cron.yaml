@@ -1,0 +1,20 @@
+#=============================================================================
+#      Editors:  Martyn Fitzgerald - 16025948
+#
+#  Module Code:  UFCFR4-45-3
+# Module Title:  Computing Project
+#
+#   Instructor:  Paul Raynor
+#     Due Date:  23/04/2020
+#
+#    File Name:  cron.yaml  
+#   Definition:  cron: The software utility cron is a time-based job scheduler 
+#                in Unix-like computer operating systems.
+#  Description:  This is adding a cron job with a timer of every week on wesnesday
+#                at 1am (0 1 * * 3) to the worker tier of the Elastic Beanstalk environment.
+#=============================================================================
+version: 1
+cron:
+  - name: "schedule"
+    url: "/schedule"
+    schedule: "0 1 * * 3"
