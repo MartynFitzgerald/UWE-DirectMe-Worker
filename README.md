@@ -12,7 +12,7 @@ This component...
 This is a diagram that shows how the system shall be used.
 
 <div align="center">
-![Finite State Diagram](./installation_screenshots/DirectMe_Worker.png)
+![Finite State Diagram](./git_screenshots/DirectMe_Worker.png)
 </div>
 
 <hr>
@@ -50,21 +50,21 @@ npm install
 6. Zip all internal files within the folder DirectMe-Worker. Note: Dont just do the main folder, make sure you highlight all of the files inside! 
 7. Sign into AWS Management Console. 
 8. Open the 'Services' Menu and then select the service 'Elastic Beanstalk' under the sub menu of 'Compute'.
-![AWS 1](./installation_screenshots/aws1.png)
+![AWS 1](./git_screenshots/aws1.png)
 9. Select option 'Create a new environment'.
-![AWS 2](./installation_screenshots/aws2.png)
+![AWS 2](./git_screenshots/aws2.png)
 10. Afterwards it will ask what type of tier the enviroment will be, select 'Web server environment'.
-![AWS 3](./installation_screenshots/aws3.png)
+![AWS 3](./git_screenshots/aws3.png)
 11. Fill in the name of the application and under the section 'Application code'.
-![AWS 4](./installation_screenshots/aws4.png)
+![AWS 4](./git_screenshots/aws4.png)
 12. Select platform as 'Node.js'.
-![AWS 5](./installation_screenshots/aws5.png)
+![AWS 5](./git_screenshots/aws5.png)
 13. Select 'Upload your code' and choose the zip file created previously. Then Create the environment which may take a few minutes. 
-![AWS 6](./installation_screenshots/aws6.png)
+![AWS 6](./git_screenshots/aws6.png)
 14. In the new enviroment select 'Configuration'.
-![AWS 7](./installation_screenshots/aws7.png)
+![AWS 7](./git_screenshots/aws7.png)
 15. Edit the 'Software'.
-![AWS 8](./installation_screenshots/aws8.png)
+![AWS 8](./git_screenshots/aws8.png)
 16. Insert 'npm start', then apply the settings.
-![AWS 9](./installation_screenshots/aws9.png)
+![AWS 9](./git_screenshots/aws9.png)
 17. Now the worker will be executed every week on Wesnesday at 1am.
