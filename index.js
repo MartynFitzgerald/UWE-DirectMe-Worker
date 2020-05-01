@@ -15,23 +15,11 @@ var request = require("request");
 var moment = require('moment');
 var async = require("async");
 var dbController = require('./dbconnection');
+const { v1: uuidv1 } = require('uuid');
+var api = require('./apiFunctionality');
 
 var carParks = [];
 
-/* 
-  A function that selects all scraping locations stored within the database and returns the result.
-*/
-async function getScrapingLocations(callback) {
-  var sql = "SELECT * FROM scraping_location;";
-
-  dbController.connection.query(sql, function(error, result) {
-    if (error) {
-      return callback(error);
-    }
-
-    return callback(null, result);
-  });
-}
 
 /* 
   A function that request data from google's api and loops through the pages. 
@@ -80,14 +68,16 @@ async function carparksInsert(lat, lng, radius, scrapingLocationId) {
       process.exit();
     }
     
-    async.each(result, function (row, callback) {
+    async.each(result, function (row) {
       //Assigning key values to be inserted into the exernal provider table
-      var externalId = row.id;
-      var externalProvider = "Google";
-      var placeId = row.place_id;
-      var reference = row.reference;
-      var rating = row.rating;
-      var amountUserRatings = row.user_ratings_total;
+      var externalProviderArray = {
+        external_provider_id: row.id,
+        name: "Google",
+        place_id: row.place_id,
+        reference: row.reference,
+        user_rating_total: row.rating ? null : 0,
+        car_park_id: row.user_ratings_total ? null : 0,
+      };
       //Assigning key values to be inserted into the car park table
       var name = row.name;
       var latitude = (row.geometry.location.lat).toFixed(4);
@@ -97,44 +87,34 @@ async function carparksInsert(lat, lng, radius, scrapingLocationId) {
       var lastUpdatedAt = moment(Date.now()).format('YYYY-MM-DD HH:mm:ss');
 
       //Insert new external provder id
-      dbController.connection.query(`INSERT IGNORE INTO external_provider (external_provider_id, name, place_id, reference, rating, user_ratings_total) VALUES ('${externalId}', '${externalProvider}', '${placeId}', '${reference}', '${rating}', '${amountUserRatings}');`, function(error, result, fields) {
-        if (error) {
-          console.error(`${new Date().toISOString()} - DirectMe - Failed to Insert - '${externalId}'`, error);
-          process.exit();
-        }
-        if (result.affectedRows > 0)
-        {
-          console.log(`${new Date().toISOString()} - DirectMe - Inserted ID - '${externalId}'`);
-        }
-      });
+      api.insert(`EXTERNALPROVIDER`, externalProviderArray).catch((error) => {console.log(error)});
       
-      dbController.connection.query(`SELECT * FROM car_park WHERE external_provider_id = '${externalId}';`, function(error, result, fields) {
+      dbController.connection.query(`SELECT * FROM car_park WHERE external_provider_id = '${externalProviderArray.external_provider_id}';`, function(error, result, fields) {
         if (error) {
-          console.error(`${new Date().toISOString()} - DirectMe - Failed to update - '${externalId}'`, error);
+          console.error(`${new Date().toISOString()} - DirectMe - Failed to update - '${externalProviderArray.external_provider_id}'`, error);
           process.exit();
         }
 
         if (result.length > 0) {
           if ((result[0].name != name) || (result[0].latitude.toFixed(4) != latitude) || (result[0].longitude.toFixed(4) != longitude) || (result[0].address != address)) {
             //Update car park with the new values
-            dbController.connection.query(`UPDATE car_park SET name = '${name}', latitude = '${latitude}', longitude = '${longitude}', address = "${address}", last_updated_at = '${lastUpdatedAt}' WHERE external_provider_id = '${externalId}';`, function(error, result, fields) {
+            dbController.connection.query(`UPDATE car_park SET name = '${name}', latitude = '${latitude}', longitude = '${longitude}', address = "${address}", last_updated_at = '${lastUpdatedAt}' WHERE external_provider_id = '${externalProviderArray.external_provider_id}';`, function(error, result, fields) {
               if (error) {
-              console.error(`${new Date().toISOString()} - DirectMe - Failed to update - '${externalId}'`, error);
+              console.error(`${new Date().toISOString()} - DirectMe - Failed to update - '${externalProviderArray.external_provider_id}'`, error);
               process.exit();
               }
-              console.log(`${new Date().toISOString()} - DirectMe - Updated CP - '${externalId}'`);
+              console.log(`${new Date().toISOString()} - DirectMe - Updated CP - '${externalProviderArray.external_provider_id}'`);
             });
            }
         } else {
           //Update car park with the new values
-          dbController.connection.query(`INSERT IGNORE INTO car_park (scraping_location_id, external_provider_id, name, address, latitude, longitude, last_updated_at) VALUES ('${scrapingLocationId}','${externalId}','${name}',"${address}",'${latitude}','${longitude}','${lastUpdatedAt}');`, function(error, result, fields) {
+          dbController.connection.query(`INSERT IGNORE INTO car_park (car_park_id, scraping_location_id, external_provider_id, name, address, latitude, longitude, last_updated_at) VALUES ('${uuidv1()}', '${scrapingLocationId}','${externalProviderArray.external_provider_id}','${name}',"${address}",'${latitude}','${longitude}','${lastUpdatedAt}');`, function(error, result, fields) {
             if (error) {
-              console.error(`${new Date().toISOString()} - DirectMe - Failed to insert - '${externalId}'`, error);
+              console.error(`${new Date().toISOString()} - DirectMe - Failed to insert - '${externalProviderArray.external_provider_id}'`, error);
               process.exit();
             }
-            if (result.affectedRows > 0)
-            {
-              console.log(`${new Date().toISOString()} - DirectMe - Inserted CP - '${externalId}'`);
+            if (result.affectedRows > 0) {
+              console.log(`${new Date().toISOString()} - DirectMe - Inserted CP - '${externalProviderArray.external_provider_id}'`);
             }
           });
         }
@@ -142,30 +122,18 @@ async function carparksInsert(lat, lng, radius, scrapingLocationId) {
     });
   });
 }
-
-//Log the Initialization of the worker.
-console.log(`${new Date().toISOString()} - DirectMe - Worker Initializing.`);
-
 /* 
-  The initializer of getting scraping locations.
+  The initialize worker.
 */
-getScrapingLocations(function(error, result) {
-  if (error) {
-    console.error(`${new Date().toISOString()} - DirectMe - Failed to get scraping locations`, error);
-    process.exit();
+console.log(`${new Date().toISOString()} - DirectMe - Worker Initializing.`);
+/* 
+  Selects all scraping locations stored within the database and returns the result.
+*/
+api.read(`SCRAPINGLOCATIONS`)
+.then(async (scrapingLocations) => {
+  for(var i = 0; i < scrapingLocations.result.length; i++){
+    await carparksInsert(scrapingLocations.result[i].latitude, scrapingLocations.result[i].longitude, scrapingLocations.result[i].radius, scrapingLocations.result[i].scraping_location_id);
   }
-
-  async.each(result, function (row, callback) {
-    carparksInsert(row.latitude, row.longitude, row.radius, row.scraping_location_id);
-  });
+  //console.log(`${new Date().toISOString()} - DirectMe - Worker Exit.`);
+  //process.exit();
 });
-/*function(error) {
-  if (error) {
-    console.error(`${new Date().toISOString()} - DirectMe - Failed after async`, error);
-    process.exit();
-  }
-
-  //Log the Initialization of the worker.
-  console.log(`${new Date().toISOString()} - DirectMe - Worker Exit.`);
-  process.exit();
-}*/
