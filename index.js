@@ -75,8 +75,8 @@ async function carparksInsert(lat, lng, radius, scrapingLocationId) {
         name: "Google",
         place_id: row.place_id,
         reference: row.reference,
-        user_rating_total: row.rating ? null : 0,
-        car_park_id: row.user_ratings_total ? null : 0,
+        rating: row.rating ? null : `0`,
+        user_rating_total: row.user_ratings_total ? null : `0`,
       };
       //Assigning key values to be inserted into the car park table
       var name = row.name;

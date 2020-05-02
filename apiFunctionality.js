@@ -29,18 +29,25 @@ exports.read = async function(item) {
 }
 /* 
   A function that selects all scraping locations stored within the database and returns the result.
-*/
+*//* INSERT external provider into the db. */
+//router.post('/API/INSERT/EXTERNALPROVIDER/', externalProvider.insert);
+
 exports.insert = async function(item, data) {
   try {
     let header = {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Accept':       'application/json',
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify(data)
     }
+    //console.log(`http://parkingapplicationapi-env.fwmaq3pfqz.us-east-1.elasticbeanstalk.com/API/INSERT/${item}/`, header);
     return fetch(`http://parkingapplicationapi-env.fwmaq3pfqz.us-east-1.elasticbeanstalk.com/API/INSERT/${item}/`, header)
       .then((response) => response.json())
       .then((result) => {
-        return result;
+        console.log(result)
+        //return result;
       });
   }
   catch (error) {
