@@ -14,7 +14,6 @@
 var request = require("request");
 var moment = require('moment');
 var async = require("async");
-var dbController = require('./dbconnection');
 const { v1: uuidv1 } = require('uuid');
 var api = require('./apiFunctionality');
 
