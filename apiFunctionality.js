@@ -16,9 +16,9 @@ const fetch = require('node-fetch');
 /* 
   A function that selects all scraping locations stored within the database and returns the result.
 */
-exports.read = async function(item) {
+exports.read = async function(item, data='') {
   try {
-    return fetch(`http://parkingapplicationapi-env.fwmaq3pfqz.us-east-1.elasticbeanstalk.com/API/GET/${item}/`)
+    return fetch(`http://parkingapplicationapi-env.fwmaq3pfqz.us-east-1.elasticbeanstalk.com/API/GET/${item}/${data}`)
       .then((response) => response.json())
       .then((result) => {
         return result;
@@ -42,12 +42,11 @@ exports.insert = async function(item, data) {
       },
       body: JSON.stringify(data)
     }
-    //console.log(`http://parkingapplicationapi-env.fwmaq3pfqz.us-east-1.elasticbeanstalk.com/API/INSERT/${item}/`, header);
+    console.log(`http://parkingapplicationapi-env.fwmaq3pfqz.us-east-1.elasticbeanstalk.com/API/INSERT/${item}/`, header);
     return fetch(`http://parkingapplicationapi-env.fwmaq3pfqz.us-east-1.elasticbeanstalk.com/API/INSERT/${item}/`, header)
       .then((response) => response.json())
       .then((result) => {
-        console.log(result)
-        //return result;
+        return result;
       });
   }
   catch (error) {
