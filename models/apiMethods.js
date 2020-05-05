@@ -12,13 +12,14 @@
 |                from the Google's API and INSERT it into the database.
 *===========================================================================*/
 const fetch = require('node-fetch');
+const endpointAWS = `http://3.234.69.9/`;
 
 /* 
   A function that selects all scraping locations stored within the database and returns the result.
 */
 exports.read = async function(item, data='') {
   try {
-    return fetch(`http://parkingapplicationapi-env.fwmaq3pfqz.us-east-1.elasticbeanstalk.com/API/GET/${item}/${data}`)
+    return fetch(`${endpointAWS}API/GET/${item}/${data}`)
       .then((response) => response.json())
       .then((result) => {
         return result;
@@ -42,8 +43,8 @@ exports.insert = async function(item, data) {
       },
       body: JSON.stringify(data)
     }
-    console.log(`http://parkingapplicationapi-env.fwmaq3pfqz.us-east-1.elasticbeanstalk.com/API/INSERT/${item}/`, header);
-    return fetch(`http://parkingapplicationapi-env.fwmaq3pfqz.us-east-1.elasticbeanstalk.com/API/INSERT/${item}/`, header)
+    console.log(`${endpointAWS}API/INSERT/${item}/`, header);
+    return fetch(`${endpointAWS}API/INSERT/${item}/`, header)
       .then((response) => response.json())
       .then((result) => {
         return result;
