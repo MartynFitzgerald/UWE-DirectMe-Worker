@@ -89,7 +89,7 @@ exports.carparksInsert = async function(lat, lng, radius, scrapingLocationId) {
             //Insert ignore the external provder id.
             apiMethods.insert(`EXTERNALPROVIDER`, externalProviderArray).catch((error) => {console.log(error)});
             //Search for the car park with the linked external provered ID.
-            apiMethods.read(`CARPARK/EPID`, externalProviderArray.external_provider_id)
+            apiMethods.read(`CARPARK/EPID/${externalProviderArray.external_provider_id}`)
             .then(async (carpark) => {
                 if (carpark.result.length > 0) {
                     if ((carpark.result[0].name != carparkArray.name) || (carpark.result[0].latitude.toFixed(4) != carparkArray.latitude) || (carpark.result[0].longitude.toFixed(4) != carparkArray.longitude) || (carpark.result[0].address != carparkArray.address)) {

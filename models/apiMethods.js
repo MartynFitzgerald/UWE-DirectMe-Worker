@@ -15,11 +15,12 @@ const fetch = require('node-fetch');
 const endpointAWS = `http://directme-api.us-east-1.elasticbeanstalk.com/`;
 
 /* 
-  A function that selects all scraping locations stored within the database and returns the result.
+  A function that requests certain types of data from API depending on item string inputted
+  declaring what table to gather the data from.
 */
-exports.read = async function(item, data='') {
+exports.read = async function(item) {
   try {
-    return fetch(`${endpointAWS}API/GET/${item}/${data}`)
+    return fetch(`${endpointAWS}API/GET/${item}/`)
       .then((response) => response.json())
       .then((result) => {
         return result;
@@ -29,10 +30,10 @@ exports.read = async function(item, data='') {
   }
 }
 /* 
-  A function that selects all scraping locations stored within the database and returns the result.
-*//* INSERT external provider into the db. */
-//router.post('/API/INSERT/EXTERNALPROVIDER/', externalProvider.insert);
-
+  A function that insert certain types of data into the API depending on item string inputted
+  declaring what table to gather the data from and then using the data array to specify column
+  key and value.
+*/
 exports.insert = async function(item, data) {
   try {
     let header = {
