@@ -15,6 +15,7 @@ var request = require("request");
 var moment = require('moment');
 var async = require("async");
 var uuid = require('uuid');
+var apiMethods = require('../models/apiMethods');
 //Defining car
 var carParks = [];
 /* 
@@ -83,12 +84,12 @@ exports.carparksInsert = async function(lat, lng, radius, scrapingLocationId) {
                 latitude: (row.geometry.location.lat).toFixed(4),
                 longitude:(row.geometry.location.lng).toFixed(4),
                 address: row.vicinity,
-                lastUpdatedAt: moment(Date.now()).format('YYYY-MM-DD HH:mm:ss'),// Using moment libary to allow be able to add this into MySQL timestamp format 
+                last_updated_at: moment(Date.now()).format('YYYY-MM-DD HH:mm:ss'),// Using moment libary to allow be able to add this into MySQL timestamp format 
             };
             //Insert ignore the external provder id.
-            api.insert(`EXTERNALPROVIDER`, externalProviderArray).catch((error) => {console.log(error)});
+            apiMethods.insert(`EXTERNALPROVIDER`, externalProviderArray).catch((error) => {console.log(error)});
             //Search for the car park with the linked external provered ID.
-            api.read(`CARPARK/EPID`, externalProviderArray.external_provider_id)
+            apiMethods.read(`CARPARK/EPID`, externalProviderArray.external_provider_id)
             .then(async (carpark) => {
                 if (carpark.result.length > 0) {
                     if ((carpark.result[0].name != carparkArray.name) || (carpark.result[0].latitude.toFixed(4) != carparkArray.latitude) || (carpark.result[0].longitude.toFixed(4) != carparkArray.longitude) || (carpark.result[0].address != carparkArray.address)) {
@@ -97,7 +98,7 @@ exports.carparksInsert = async function(lat, lng, radius, scrapingLocationId) {
                     }
                 } else {
                 //insert car park 
-                api.insert(`CARPARK`, carparkArray).catch((error) => {console.log(error)});
+                apiMethods.insert(`CARPARK`, carparkArray).catch((error) => {console.log(error)});
                 }
             });
         });

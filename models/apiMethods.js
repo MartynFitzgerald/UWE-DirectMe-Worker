@@ -12,7 +12,7 @@
 |                from the Google's API and INSERT it into the database.
 *===========================================================================*/
 const fetch = require('node-fetch');
-const endpointAWS = `http://3.234.69.9/`;
+const endpointAWS = `http://directme-api.us-east-1.elasticbeanstalk.com/`;
 
 /* 
   A function that selects all scraping locations stored within the database and returns the result.
@@ -43,7 +43,6 @@ exports.insert = async function(item, data) {
       },
       body: JSON.stringify(data)
     }
-    console.log(`${endpointAWS}API/INSERT/${item}/`, header);
     return fetch(`${endpointAWS}API/INSERT/${item}/`, header)
       .then((response) => response.json())
       .then((result) => {
@@ -51,6 +50,7 @@ exports.insert = async function(item, data) {
       });
   }
   catch (error) {
+    console.log(`${endpointAWS}API/INSERT/${item}/`, header);
     return console.error(error);
   }
 }
