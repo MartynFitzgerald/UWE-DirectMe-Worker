@@ -21,9 +21,11 @@ console.log(`${new Date().toISOString()} - DirectMe - Worker Initializing.`);
 /* 
   Selects all scraping locations stored within the database and returns the result.
 */
-apiMethods.read(`SCRAPINGLOCATIONS`)
+apiMethods.read(`SCRAPINGLOCATION`)
 .then(async (scrapingLocations) => {
+  //Loop through scraping locations.
   for(var i = 0; i < scrapingLocations.result.length; i++){
+    //Retreive car park associated with this scrapinglocation.
     await dataHandler.carparksInsert(scrapingLocations.result[i].latitude, scrapingLocations.result[i].longitude, scrapingLocations.result[i].radius, scrapingLocations.result[i].scraping_location_id);
   }
 });

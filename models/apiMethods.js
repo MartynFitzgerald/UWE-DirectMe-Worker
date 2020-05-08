@@ -12,6 +12,7 @@
 |                from the Google's API and INSERT it into the database.
 *===========================================================================*/
 const fetch = require('node-fetch');
+// Creating endpoint API to stop redundancy.
 const endpointAWS = `http://directme-api.us-east-1.elasticbeanstalk.com/`;
 
 /* 
@@ -20,13 +21,13 @@ const endpointAWS = `http://directme-api.us-east-1.elasticbeanstalk.com/`;
 */
 exports.read = async function(item) {
   try {
-    return fetch(`${endpointAWS}API/GET/${item}/`)
+    return fetch(`${endpointAWS}API/${item}/`)
       .then((response) => response.json())
       .then((result) => {
         return result;
       });
   } catch(error) {
-    console.error(error);
+    return console.error(error);
   }
 }
 /* 
@@ -44,14 +45,13 @@ exports.insert = async function(item, data) {
       },
       body: JSON.stringify(data)
     }
-    return fetch(`${endpointAWS}API/INSERT/${item}/`, header)
+    return fetch(`${endpointAWS}API/${item}/`, header)
       .then((response) => response.json())
       .then((result) => {
         return result;
       });
   }
   catch (error) {
-    console.log(`${endpointAWS}API/INSERT/${item}/`, header);
     return console.error(error);
   }
 }

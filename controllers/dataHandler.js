@@ -16,7 +16,7 @@ var moment = require('moment');
 var async = require("async");
 var uuid = require('uuid');
 var apiMethods = require('../models/apiMethods');
-//Defining car
+//Defining car parks array to store when functions are recursive.
 var carParks = [];
 /* 
   A function that request data from google's api and loops through the pages. 
@@ -26,7 +26,7 @@ async function requestGoogleApi(url, nextPageToken = null, callback) {
   var currentUrl = url;
   //If token has been inputted to the function then add it onto the url.
   if (nextPageToken) {
-    currentUrl += "&pagetoken=" + nextPageToken;
+    currentUrl += `&pagetoken=${nextPageToken}`;
   }
   //Request the external API for car parks.
   request({url: currentUrl}, function(error, response, body) {
@@ -42,7 +42,7 @@ async function requestGoogleApi(url, nextPageToken = null, callback) {
     }
 
     var nextPageToken = data.next_page_token;
-    //Cckes
+    //Check if there is a token inputted into this function.
     if (nextPageToken != null && nextPageToken != "") {
       setTimeout(function() {
         requestGoogleApi(url, nextPageToken, callback);
@@ -72,8 +72,8 @@ exports.carparksInsert = async function(lat, lng, radius, scrapingLocationId) {
                 name: "Google",
                 place_id: row.place_id,
                 reference: row.reference,
-                rating: row.rating ? null : `0`,
-                user_ratings_total: row.user_ratings_total ? null : `0`,
+                rating: (row.rating <= 0 || row.rating == undefined) ?  `0`: `${row.rating}`,
+                user_ratings_total: (row.user_ratings_total <= 0 || row.user_ratings_total == undefined) ?  `0`: `${row.user_ratings_total}`,
             };
             //Assigning keys, and values to an array which will be inserted into the car park data stored within a database.
             var carparkArray = {
