@@ -13,7 +13,7 @@
 *===========================================================================*/
 const fetch = require('node-fetch');
 // Creating endpoint API to stop redundancy.
-const endpointAWS = `http://directme-api.us-east-1.elasticbeanstalk.com/`;
+const endpointAWS = `http://directme-api.eu-west-2.elasticbeanstalk.com/`;
 
 /* 
   A function that requests certain types of data from API depending on item string inputted
