@@ -13,10 +13,9 @@
 *===========================================================================*/
 var dataHandler = require('./controllers/dataHandler');
 var apiMethods = require('./models/apiMethods');
-/* 
-  The initialize the Lambda worker.
-*/
+
 exports.handler = async (event) => {
+  //The initialize the Lambda worker.
   console.log(`${new Date().toISOString()} - DirectMe - Worker Initializing.`);
   //Selects all scraping locations stored within the database and returns the result.
   var scrapingLocations = await apiMethods.read(`SCRAPINGLOCATION`);
@@ -26,6 +25,6 @@ exports.handler = async (event) => {
     //Retrieve car park associated with this scraping location.
     await dataHandler.insertCarPark(scrapingLocations.result[i].latitude, scrapingLocations.result[i].longitude, scrapingLocations.result[i].radius, scrapingLocations.result[i].scraping_location_id);
   }
+  //The terminate the Lambda worker.
   console.log(`${new Date().toISOString()} - DirectMe - Worker Exit.`);
-  process.exit();
 };

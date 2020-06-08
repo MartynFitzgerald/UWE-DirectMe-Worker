@@ -38,7 +38,7 @@ This is a diagram that shows how the system shall be used.
 ```bash
 git clone https://gitlab.uwe.ac.uk/m4-fitzgerald/DirectMe-Worker.git
 ```
-3. Move into the folder of the reporsitory.
+3. Move into the folder of the repository.
 ```bash
 cd DirectMe-Worker
 ```
@@ -47,13 +47,13 @@ cd DirectMe-Worker
 npm install
 ```
 5. Change the credentials in dbconnections.js to the ones created within the API component.
-6. Zip all internal files within the folder DirectMe-Worker. Note: Dont just do the main folder, make sure you highlight all of the files inside! 
+6. Zip all internal files within the folder DirectMe-Worker. Note: Don't just do the main folder, make sure you highlight all of the files inside! 
 7. Sign into AWS Management Console. 
 8. Open the 'Services' Menu and then select the service 'Elastic Beanstalk' under the sub menu of 'Compute'.
 ![AWS 1](./git_screenshots/aws1.png)
 9. Select option 'Create a new environment'.
 ![AWS 2](./git_screenshots/aws2.png)
-10. Afterwards it will ask what type of tier the enviroment will be, select 'Web server environment'.
+10. Afterwards it will ask what type of tier the environment will be, select 'Web server environment'.
 ![AWS 3](./git_screenshots/aws3.png)
 11. Fill in the name of the application and under the section 'Application code'.
 ![AWS 4](./git_screenshots/aws4.png)
@@ -61,10 +61,10 @@ npm install
 ![AWS 5](./git_screenshots/aws5.png)
 13. Select 'Upload your code' and choose the zip file created previously. Then Create the environment which may take a few minutes. 
 ![AWS 6](./git_screenshots/aws6.png)
-14. In the new enviroment select 'Configuration'.
+14. In the new environment select 'Configuration'.
 ![AWS 7](./git_screenshots/aws7.png)
 15. Edit the 'Software'.
 ![AWS 8](./git_screenshots/aws8.png)
 16. Insert 'npm start', then apply the settings.
 ![AWS 9](./git_screenshots/aws9.png)
-17. Now the worker will be executed every week on Wesnesday at 1am.
+17. Now the worker will be executed every week on Wednesday at 1am.

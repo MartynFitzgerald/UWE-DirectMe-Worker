@@ -17,15 +17,14 @@ var uuid = require('uuid');
 var apiMethods = require('../models/apiMethods');
 //Defining car parks array to store when functions are recursive.
 var carParks = [];
-
 /* 
-  A function that 
+  This function that return setTimeout function as a promise to work with the await.
 */
 function timeout(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 /* 
-  A function that request data from google's api and loops through the pages. 
+  This function requests data from Google's api and loops through the page tokens. 
 */
 async function requestGoogleApi(url, nextPageToken = null) {
   var data;
@@ -58,7 +57,7 @@ async function requestGoogleApi(url, nextPageToken = null) {
   }
 }
 /* 
-    This function calls the fetch google information and then inserts car parks into the databases through the API. 
+  This function calls the fetch google information and then inserts car parks into the databases through the API. 
 */
 exports.insertCarPark = async function(lat, lng, radius, scrapingLocationId) {
   //Construct the URL to sent to the API.
