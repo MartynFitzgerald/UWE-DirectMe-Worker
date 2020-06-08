@@ -7,9 +7,9 @@
 |   Instructor:  Paul Raynor
 |     Due Date:  23/04/2020 Extended Till 23/07/2020
 |
-|    File Name:  index.js  
-|  Description:  This is the worker that will be fetching data of car parks
-|                from the Google's API and INSERT it into the database.
+|    File Name:  apiMethods.js  
+|  Description:  This is the file that holds all the functionality to the API.
+|                
 *===========================================================================*/
 const fetch = require('node-fetch');
 // Creating endpoint API to stop redundancy.
@@ -21,13 +21,11 @@ const endpointAWS = `http://directme-api.eu-west-2.elasticbeanstalk.com/`;
 */
 exports.read = async function(item) {
   try {
-    return fetch(`${endpointAWS}API/${item}/`)
-      .then((response) => response.json())
-      .then((result) => {
-        return result;
-      });
-  } catch(error) {
-    return console.error(error);
+    const response = await fetch(`${endpointAWS}API/${item}/`);
+    const json = await response.json();
+    return json;
+  } catch (error) {
+    console.log(error.response.body);
   }
 }
 /* 
@@ -36,22 +34,41 @@ exports.read = async function(item) {
   key and value.
 */
 exports.insert = async function(item, data) {
+  let header = {
+    method: 'POST',
+    headers: {
+      'Accept':       'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data)
+  };
   try {
-    let header = {
-      method: 'POST',
-      headers: {
-        'Accept':       'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data)
-    }
-    return fetch(`${endpointAWS}API/${item}/`, header)
-      .then((response) => response.json())
-      .then((result) => {
-        return result;
-      });
+    const response = await fetch(`${endpointAWS}API/${item}/`, header);
+    const json = await response.json();
+    return json;
+  } catch (error) {
+    console.log(error.response.body);
   }
-  catch (error) {
-    return console.error(error);
+}
+/* 
+  A function that updates certain types of data into the API depending on item string inputted
+  declaring what table to gather the data from and then using the data array to specify column
+  key and value.
+*/
+exports.update  = async function(item, data) {
+  let header = {
+    method: 'PUT',
+    headers: {
+      'Accept':       'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data)
+  };
+  try {
+    const response = await fetch(`${endpointAWS}API/${item}/`, header);
+    const json = await response.json();
+    return json;
+  } catch (error) {
+    console.log(error.response.body);
   }
 }
