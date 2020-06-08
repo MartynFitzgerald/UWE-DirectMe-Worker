@@ -5,7 +5,7 @@
 | Module Title:  Computing Project
 |
 |   Instructor:  Paul Raynor
-|     Due Date:  23/04/2020 Extended Till 23/07/2020
+|     Due Date:  23/04/2020 Extended Till 06/08/2020
 |
 |    File Name:  index.js  
 |  Description:  This is the worker that will be fetching data of car parks
