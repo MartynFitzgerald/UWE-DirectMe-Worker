@@ -14,7 +14,6 @@
 const fetch = require('node-fetch');
 // Creating endpoint API to stop redundancy.
 const endpointAWS = `http://directme-api.eu-west-2.elasticbeanstalk.com/`;
-
 /* 
   A function that requests certain types of data from API depending on item string inputted
   declaring what table to gather the data from.
@@ -37,7 +36,7 @@ exports.insert = async function(item, data) {
   let header = {
     method: 'POST',
     headers: {
-      'Accept':       'application/json',
+      'Accept': 'application/json',
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(data)
@@ -55,11 +54,11 @@ exports.insert = async function(item, data) {
   declaring what table to gather the data from and then using the data array to specify column
   key and value.
 */
-exports.update  = async function(item, data) {
+exports.update = async function(item, data) {
   let header = {
     method: 'PUT',
     headers: {
-      'Accept':       'application/json',
+      'Accept': 'application/json',
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(data)
