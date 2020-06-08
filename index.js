@@ -14,23 +14,18 @@
 var dataHandler = require('./controllers/dataHandler');
 var apiMethods = require('./models/apiMethods');
 /* 
-  The initialize worker.
+  The initialize the Lambda worker.
 */
-//exports.handler = async (event) => {
-  async function doWork() {
+exports.handler = async (event) => {
   console.log(`${new Date().toISOString()} - DirectMe - Worker Initializing.`);
-  /* 
-    Selects all scraping locations stored within the database and returns the result.
-  */
+  //Selects all scraping locations stored within the database and returns the result.
   var scrapingLocations = await apiMethods.read(`SCRAPINGLOCATION`);
-  //.then(async (scrapingLocations) => {
-  console.log(`Scraping Locations: `, scrapingLocations);
+  console.log(`Amount of scraping locations: `, scrapingLocations.result.length);
   //Loop through scraping locations.
   for (var i = 0; i < scrapingLocations.result.length; i++) {
-    //Retreive car park associated with this scrapinglocation.
-    await dataHandler.carparksInsert(scrapingLocations.result[i].latitude, scrapingLocations.result[i].longitude, scrapingLocations.result[i].radius, scrapingLocations.result[i].scraping_location_id);
+    //Retrieve car park associated with this scraping location.
+    await dataHandler.insertCarPark(scrapingLocations.result[i].latitude, scrapingLocations.result[i].longitude, scrapingLocations.result[i].radius, scrapingLocations.result[i].scraping_location_id);
   }
+  console.log(`${new Date().toISOString()} - DirectMe - Worker Exit.`);
+  process.exit();
 };
-doWork();
-//console.log(`${new Date().toISOString()} - DirectMe - Worker Exit.`);
-//process.exit();

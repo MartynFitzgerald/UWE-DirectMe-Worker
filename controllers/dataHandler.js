@@ -18,6 +18,9 @@ var apiMethods = require('../models/apiMethods');
 //Defining car parks array to store when functions are recursive.
 var carParks = [];
 
+/* 
+  A function that 
+*/
 function timeout(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -25,22 +28,23 @@ function timeout(ms) {
   A function that request data from google's api and loops through the pages. 
 */
 async function requestGoogleApi(url, nextPageToken = null) {
+  var data;
   //Copying the url to add tokens if needed 
   var currentUrl = url;
   //If token has been inputted to the function then add it onto the url.
   if (nextPageToken) {
     currentUrl += `&pagetoken=${nextPageToken}`;
   }
-  var data;
   //Request the external API for car parks.
   try {
-    //console.log(currentUrl);
+    console.log(`Requested URL: `, currentUrl);
     const response = await fetch(currentUrl);
     data = await response.json();
   } catch (error) {
     console.log(error.response.body);
     process.exit();
   }
+  //Loop through results and add them into the carParks array.
   for (var i = 0; i < data.results.length; i++) {
     carParks.push(data.results[i]);
   }
@@ -56,7 +60,7 @@ async function requestGoogleApi(url, nextPageToken = null) {
 /* 
     This function calls the fetch google information and then inserts car parks into the databases through the API. 
 */
-exports.carparksInsert = async function(lat, lng, radius, scrapingLocationId) {
+exports.insertCarPark = async function(lat, lng, radius, scrapingLocationId) {
   //Construct the URL to sent to the API.
   var url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?type=parking&radius=${radius}&location=${lat},${lng}&key=AIzaSyBeMKzk8ZpyU2Hk_lrVmlO-Ggq1tQqtYsM`;
   var result;
