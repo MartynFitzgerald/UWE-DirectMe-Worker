@@ -46,25 +46,25 @@ cd DirectMe-Worker
 ```bash
 npm install
 ```
-5. Change the credentials in dbconnections.js to the ones created within the API component.
+5. Change the endpoint of AWS in apiMethods.js to the one created within the API component.
 6. Zip all internal files within the folder DirectMe-Worker. Note: Don't just do the main folder, make sure you highlight all of the files inside! 
 7. Sign into AWS Management Console. 
-8. Open the 'Services' Menu and then select the service 'Elastic Beanstalk' under the sub menu of 'Compute'.
+8. Open the 'Services' Menu and then select the service 'Lambda' under the sub menu of 'Compute'.
 ![AWS 1](./git_screenshots/aws1.png)
-9. Select option 'Create a new environment'.
+9. Select option 'Create Function'.
 ![AWS 2](./git_screenshots/aws2.png)
-10. Afterwards it will ask what type of tier the environment will be, select 'Web server environment'.
+10. Afterwards it will ask what type of function the environment will be, select 'Author from scratch'.
+11. Give the function name a string like 'DirectMe_Worker'.
+12. Select runtime as 'Node.js' ^12.x, then select option 'Create function'.
 ![AWS 3](./git_screenshots/aws3.png)
-11. Fill in the name of the application and under the section 'Application code'.
+13. Within the environment select 'Actions' under 'Function code' and then select 'Upload a .zip file' then choose the zip file created previously. To upload the environment it may take a few minutes. 
 ![AWS 4](./git_screenshots/aws4.png)
-12. Select platform as 'Node.js'.
+14. In the new environment select 'Triggers'.
 ![AWS 5](./git_screenshots/aws5.png)
-13. Select 'Upload your code' and choose the zip file created previously. Then Create the environment which may take a few minutes. 
+15. Within 'Trigger configuration' select a trigger named 'CloudWatch Events/EventBridge'.
 ![AWS 6](./git_screenshots/aws6.png)
-14. In the new environment select 'Configuration'.
+16. Add a new rule by selecting 'Create a new rule'.
 ![AWS 7](./git_screenshots/aws7.png)
-15. Edit the 'Software'.
+17. Insert name of event and also include a schedule expression by either using cron or rate.
+18. Press add to insert the trigger.
 ![AWS 8](./git_screenshots/aws8.png)
-16. Insert 'npm start', then apply the settings.
-![AWS 9](./git_screenshots/aws9.png)
-17. Now the worker will be executed every week on Wednesday at 1am.
