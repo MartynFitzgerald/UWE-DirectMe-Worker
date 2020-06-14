@@ -17,6 +17,8 @@ var uuid = require('uuid');
 var apiMethods = require('../models/apiMethods');
 //Defining car parks array to store when functions are recursive.
 var carParks = [];
+//API key for the Google Places.
+var apiKey = 'AIzaSyBeMKzk8ZpyU2Hk_lrVmlO-Ggq1tQqtYsM';
 /* 
   This function that return setTimeout function as a promise to work with the await.
 */
@@ -61,7 +63,7 @@ async function requestGoogleApi(url, nextPageToken = null) {
 */
 exports.insertCarPark = async function(lat, lng, radius, scrapingLocationId) {
   //Construct the URL to sent to the API.
-  var url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?type=parking&radius=${radius}&location=${lat},${lng}&key=AIzaSyBeMKzk8ZpyU2Hk_lrVmlO-Ggq1tQqtYsM`;
+  var url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?type=parking&radius=${radius}&location=${lat},${lng}&key=${apiKey}`;
   var result;
   carParks = [];
   try {

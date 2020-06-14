@@ -24,12 +24,27 @@ This is a diagram that shows how the system shall be used.
 * Lucidchart
 * Amazon Web Services (AWS)
 
-## Setup Enviroment (Windows/Cloud Services)
+## Setup Environment (Windows/Cloud Services)
 
 1. Install Git (https://gitforwindows.org/).
 2. Install Node.js 12+ LTS (https://nodejs.org/en/download/).
-3. Setup DirectMe API (https://gitlab.uwe.ac.uk/m4-fitzgerald/DirectMe-API).
-4. Create a AWS account, if one does't already exist.
+3. Create a AWS account, if one doesn't already exist.
+4. Setup DirectMe API (https://gitlab.uwe.ac.uk/m4-fitzgerald/DirectMe-API).
+5. Create a Google Cloud Platform(GCP) account, if one doesn't already exist.
+6. When in the dashboard of GCP, open the menu at top left of the screen and then go to 'APIs & Services' and click on 'Library'.
+![GOOGLE 1](./git_screenshots/google1.png)
+7. Click on option 'Places API'.
+![GOOGLE 2](./git_screenshots/google2.png)
+8. Press the button that displays 'Enable' (In the picture it says 'Manage' instead).
+![GOOGLE 3](./git_screenshots/google3.png)
+9. Press the button that displays 'Credentials'.
+![GOOGLE 4](./git_screenshots/google4.png)
+10. Press the copy icon next to the text that displays 'Places API'.
+![GOOGLE 5](./git_screenshots/google5.png)
+11. Paste that endpoint of the API inside dataHandler.js to the new url.
+```diff
+- Make sure you limit the Google Places quotes on the amount of request are allowed from this API Key. 
+```
 
 ## Installation
 
@@ -49,11 +64,11 @@ npm install
 5. Change the endpoint of AWS in apiMethods.js to the one created within the API component.
 6. Zip all internal files within the folder DirectMe-Worker. Note: Don't just do the main folder, make sure you highlight all of the files inside! 
 7. Sign into AWS Management Console. 
-8. Open the 'Services' Menu and then select the service 'Lambda' under the sub menu of 'Compute'.
+8. Open the 'Services' menu and then select the service 'Lambda' under the sub-menu of 'Compute'.
 ![AWS 1](./git_screenshots/aws1.png)
 9. Select option 'Create Function'.
 ![AWS 2](./git_screenshots/aws2.png)
-10. Afterwards it will ask what type of function the environment will be, select 'Author from scratch'.
+10. Afterwards, it will ask what type of function the environment will be, select 'Author from scratch'.
 11. Give the function name a string like 'DirectMe_Worker'.
 12. Select runtime as 'Node.js' ^12.x, then select option 'Create function'.
 ![AWS 3](./git_screenshots/aws3.png)
@@ -65,6 +80,6 @@ npm install
 ![AWS 6](./git_screenshots/aws6.png)
 16. Add a new rule by selecting 'Create a new rule'.
 ![AWS 7](./git_screenshots/aws7.png)
-17. Insert name of event and also include a schedule expression by either using cron or rate.
+17. Insert the name of the event and also include a schedule expression by either using cron or rate.
 18. Press add to insert the trigger.
 ![AWS 8](./git_screenshots/aws8.png)
