@@ -12,7 +12,7 @@ This component...
 This is a diagram that shows the key of the state transition.
 
 <div align="center">
-![State TransitionKey](./git_screenshots/State_Key.png)
+![State TransitionKey](./git_screenshots/State_Key.jpg)
 </div>
 
 This is a diagram that shows how the system shall be used.
