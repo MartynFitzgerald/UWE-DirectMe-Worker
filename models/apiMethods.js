@@ -14,13 +14,14 @@
 const fetch = require('node-fetch');
 //Creating endpoint API to stop redundancy.
 const endpointAWS = `http://directme-api.eu-west-2.elasticbeanstalk.com/`;
+var apiKey = 'a92c0620-ac2a-11ea-bc8d-67c1927ee7f3';
 /* 
   A function that requests certain types of data from API depending on item string inputted
   declaring what table to gather the data from.
 */
 exports.read = async function(item) {
   try {
-    const response = await fetch(`${endpointAWS}API/${item}/`);
+    const response = await fetch(`${endpointAWS}API/${apiKey}/${item}/`);
     const json = await response.json();
     return json;
   } catch (error) {
@@ -42,7 +43,7 @@ exports.insert = async function(item, data) {
     body: JSON.stringify(data)
   };
   try {
-    const response = await fetch(`${endpointAWS}API/${item}/`, header);
+    const response = await fetch(`${endpointAWS}API/${apiKey}/${item}/`, header);
     const json = await response.json();
     return json;
   } catch (error) {
@@ -64,7 +65,7 @@ exports.update = async function(item, data) {
     body: JSON.stringify(data)
   };
   try {
-    const response = await fetch(`${endpointAWS}API/${item}/`, header);
+    const response = await fetch(`${endpointAWS}API/${apiKey}/${item}/`, header);
     const json = await response.json();
     return json;
   } catch (error) {
