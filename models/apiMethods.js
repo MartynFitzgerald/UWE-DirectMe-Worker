@@ -14,6 +14,7 @@
 const fetch = require('node-fetch');
 //Creating endpoint API to stop redundancy.
 const endpointAWS = `http://directme-api.eu-west-2.elasticbeanstalk.com/`;
+//API key for the DirectMe's API.
 var apiKey = 'a92c0620-ac2a-11ea-bc8d-67c1927ee7f3';
 /* 
   A function that requests certain types of data from API depending on item string inputted

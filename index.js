@@ -13,7 +13,6 @@
 *===========================================================================*/
 var dataHandler = require('./controllers/dataHandler');
 var apiMethods = require('./models/apiMethods');
-
 exports.handler = async (event) => {
   //The initialize the Lambda worker.
   console.log(`${new Date().toISOString()} - DirectMe - Worker Initializing.`);
