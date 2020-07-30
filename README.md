@@ -34,9 +34,9 @@ This is a diagram that shows how the system shall be used.
 
 1. Install Git (https://gitforwindows.org/).
 2. Install Node.js 12+ LTS (https://nodejs.org/en/download/).
-3. Create a AWS account, if one doesn't already exist.
+3. Create an AWS account, if one doesn't already exist.
 4. Setup DirectMe API (https://gitlab.uwe.ac.uk/m4-fitzgerald/DirectMe-API).
-5. Create a Google Cloud Platform(GCP) account, if one doesn't already exist.
+5. Create a Google Cloud Platform (GCP) account if one doesn't already exist.
 6. When in the dashboard of GCP, open the menu at top left of the screen and then go to 'APIs & Services' and click on 'Library'.
 ![GOOGLE 1](./git_screenshots/google1.png)
 7. Click on option 'Places API'.
