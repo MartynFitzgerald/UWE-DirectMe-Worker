@@ -11,15 +11,15 @@ This component...
 
 This is a diagram that shows the key of the state transition.
 
-<div align="center">
-![State Transition Key](https://raw.githubusercontent.com/MartynFitzgerald/UWE-DirectMe-Worker/master/git_screenshots/State_Key.jpg)
-</div>
+<p align="center">
+  <img align="center" alt="State Transition Key" src="./git_screenshots/State_Key.jpg"/>
+</p>
 
 This is a diagram that shows how the system shall be used.
 
-<div align="center">
-![State Transition Diagram](https://raw.githubusercontent.com/MartynFitzgerald/UWE-DirectMe-Worker/master/git_screenshots/DirectMe_Worker.png)
-</div>
+<p align="center">
+  <img align="center" alt="State Transition Diagram" src="./git_screenshots/DirectMe_Worker.png"/>
+</p>
 
 <hr>
 
