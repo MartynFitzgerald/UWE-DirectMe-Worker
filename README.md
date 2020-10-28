@@ -12,13 +12,13 @@ This component...
 This is a diagram that shows the key of the state transition.
 
 <div align="center">
-![State TransitionKey](./git_screenshots/State_Key.jpg)
+![State Transition Key](https://raw.githubusercontent.com/MartynFitzgerald/UWE-DirectMe-Worker/master/git_screenshots/State_Key.jpg)
 </div>
 
 This is a diagram that shows how the system shall be used.
 
 <div align="center">
-![State Transition Diagram](./git_screenshots/DirectMe_Worker.png)
+![State Transition Diagram](https://raw.githubusercontent.com/MartynFitzgerald/UWE-DirectMe-Worker/master/git_screenshots/DirectMe_Worker.png)
 </div>
 
 <hr>
